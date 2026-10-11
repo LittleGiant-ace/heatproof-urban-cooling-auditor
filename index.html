@@ -1,0 +1,46 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self'">
+<title>HeatProof — Urban Cooling Impact Auditor</title>
+<style>
+:root{--bg:#f4f7f5;--card:#fff;--ink:#14231c;--mute:#4a5d54;--line:#d3ddd7;--brand:#0b6b4f;--warn:#9a5b00;--warnbg:#fff4de;--bad:#a12a2a;--badbg:#fde8e8;--t:#0b6b4f;--c:#b45309}
+@media(prefers-color-scheme:dark){:root{--bg:#0f1a15;--card:#16241d;--ink:#e8f1ec;--mute:#a9bdb2;--line:#2c3f35;--brand:#5fd1a5;--warn:#ffcc80;--warnbg:#3a2c10;--bad:#ff9a9a;--badbg:#3d1b1b;--t:#5fd1a5;--c:#ffb36b}}
+*{box-sizing:border-box}body{margin:0;font:16px/1.5 system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+header{padding:20px max(16px,4vw);border-bottom:1px solid var(--line)}h1{margin:0;font-size:1.5rem}header p{margin:2px 0 0;color:var(--mute)}
+nav{display:flex;flex-wrap:wrap;gap:6px;padding:10px max(16px,4vw);position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);z-index:2}
+nav a{padding:6px 12px;border:1px solid var(--line);border-radius:999px;color:var(--ink);text-decoration:none;font-size:.9rem}nav a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+main{max-width:1100px;margin:0 auto;padding:16px max(16px,4vw) 60px;display:grid;gap:16px}
+section{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px}h2{margin:0 0 8px;font-size:1.15rem}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}label{display:block;font-size:.85rem;font-weight:600;margin-bottom:2px}
+input,select{width:100%;padding:8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font:inherit}
+button{padding:9px 14px;border-radius:6px;border:1px solid var(--brand);background:var(--brand);color:#fff;font:inherit;cursor:pointer}button.alt{background:transparent;color:var(--brand)}button:disabled{opacity:.45;cursor:not-allowed}
+@media(prefers-color-scheme:dark){button{color:#06281c}button.alt{color:var(--brand)}}
+.acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.banner{padding:10px 12px;border-radius:8px;margin:8px 0;border-left:5px solid}.b-warn{background:var(--warnbg);border-color:var(--warn)}.b-bad{background:var(--badbg);border-color:var(--bad)}.b-info{background:var(--bg);border-color:var(--brand)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.kpi{border:1px solid var(--line);border-radius:8px;padding:10px}.kpi b{display:block;font-size:1.6rem}.kpi span{color:var(--mute);font-size:.82rem}
+table{border-collapse:collapse;width:100%;font-size:.9rem}th,td{text-align:left;padding:6px;border-bottom:1px solid var(--line)}.scroll{overflow-x:auto}
+.bar{height:10px;background:var(--line);border-radius:5px;overflow:hidden}.bar i{display:block;height:100%;background:var(--brand)}svg text{fill:var(--mute);font-size:11px}ul{margin:4px 0;padding-left:20px}.small{font-size:.85rem;color:var(--mute)}.hide{display:none}
+</style></head><body>
+<header><h1>HeatProof — Urban Cooling Impact Auditor</h1><p>Measure the cooling. Verify the impact. <span class="small">Impact-auditing &amp; decision-support prototype — not proof of causation.</span></p></header>
+<nav aria-label="Workflow"><a href="#s1">1 Study</a><a href="#s2">2 Import</a><a href="#s3">3 Validate</a><a href="#s4">4 Analyze</a><a href="#s5">5 Evidence</a><a href="#s6">6 Export</a></nav>
+<main>
+<section id="s1"><h2>1 · Create study</h2><div class="row">
+<div><label for="name">Study name</label><input id="name" value="Ward 7 tree-planting audit"></div>
+<div><label for="type">Intervention type</label><select id="type"><option>Tree planting</option><option>Park / green space</option><option>Cool roofs</option><option>Reflective pavement</option><option>Other</option></select></div>
+<div><label for="date">Intervention date</label><input id="date" type="date" value="2025-05-01"></div>
+<div><label for="source">Data source / product</label><input id="source" placeholder="e.g. product name, provider"></div>
+<div><label for="sourceUrl">Source URL</label><input id="sourceUrl" placeholder="https://…"></div>
+<div><label for="rationale">Why is the control comparable?</label><input id="rationale" placeholder="Similar land cover, density, orientation…"></div></div>
+<p class="small">Variable analysed: <strong>land-surface temperature (°C)</strong> — not air temperature, heat index, or human heat exposure. Dates are calendar dates; no time-zone conversion is applied.</p></section>
+<section id="s2"><h2>2 · Import data</h2>
+<p class="small">CSV columns: <code>site,date,group,surface_temp_c</code> (+ optional <code>unit</code>=C). <code>group</code> is <code>treatment</code> or <code>control</code>; multiple sites per group are supported. Dates are <code>YYYY-MM-DD</code>.</p>
+<div class="row"><div><label for="file">Upload CSV</label><input id="file" type="file" accept=".csv,text/csv"></div><div><label for="sample">Or load a bundled <strong>synthetic</strong> sample</label><select id="sample"><option value="demo_synthetic.csv">Demo: clear effect + data-quality issues</option><option value="misleading_synthetic.csv">Misleading: control not comparable</option></select></div></div>
+<div class="acts"><button id="loadSample">Load synthetic sample</button></div>
+<label style="margin-top:10px"><input id="synthetic" type="checkbox" style="width:auto"> This dataset is synthetic / demo data (labels all exports)</label>
+<div id="msg" role="status" aria-live="polite" class="banner b-info">No data loaded yet. Upload a CSV or load a synthetic sample.</div></section>
+<section id="s3"><h2>3 · Validate</h2><div id="valid" class="small">Validation findings appear after import.</div><div class="acts"><button id="run" disabled>Validate &amp; analyze</button></div></section>
+<section id="s4" class="hide"><h2>4 · Results</h2><div id="warn"></div><div class="kpis" id="kpis"></div><p id="interp"></p>
+<div id="chart" role="img" aria-label="Weekly mean surface temperature of treatment and control groups with the intervention date marked"></div><div class="scroll"><table id="tbl"></table></div></section>
+<section id="s5" class="hide"><h2>5 · Evidence &amp; limitations</h2><div id="ev"></div><h3>Robustness checks</h3><div id="rob"></div><h3>Analyst notes <span class="small">(deterministic rules — no AI model, no network)</span></h3><div id="analyst"></div>
+<h3>Assumptions &amp; limitations</h3><ul><li>DiD assumes treatment and control would have changed in parallel without the intervention; the pre-trend and placebo checks probe this but cannot prove it.</li><li>Intervals treat dates as independent; autocorrelation makes them optimistic. Intervals appear only with ≥4 pre and ≥4 post dates.</li><li>Weather, clouds, season, land-cover change and sensor processing can confound results.</li><li>Evidence score = data completeness heuristic (equal weights), not statistical confidence or P(intervention worked).</li></ul></section>
+<section id="s6" class="hide"><h2>6 · Export audit report</h2><div class="acts"><button id="xj">Download JSON</button><button id="xc" class="alt">Download CSV</button><button id="xp" class="alt">Print / save as PDF</button></div></section>
+</main><script src="core.js"></script><script src="samples.js"></script><script src="app.js"></script></body></html>
+<style media="print">nav,#s2,.acts,header p{display:none}section.hide{display:block}body{background:#fff;color:#000}section{break-inside:avoid;border:0}</style>

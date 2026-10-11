@@ -1,0 +1,1 @@
+{"name":"heatproof","version":"2.0.0","private":true,"description":"HeatProof — Urban Cooling Impact Auditor","scripts":{"test":"node --test tests/core.test.js","generate-data":"node scripts/generate-data.js","start":"npx --yes http-server . -p 8080 -c-1"}}
